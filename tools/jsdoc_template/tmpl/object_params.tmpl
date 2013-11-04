@@ -1,0 +1,78 @@
+<?js
+var params = data;
+
+/* sort subparams under their parent params (like opts.classname) */
+var parentParam = null;
+params.forEach(function(param, i) {
+if (!param) { return; }
+if ( parentParam && param.name.indexOf(parentParam.name + '.') === 0 ) {
+param.name = param.name.substr(parentParam.name.length+1);
+parentParam.subparams = parentParam.subparams || [];
+parentParam.subparams.push(param);
+params[i] = null;
+}
+else {
+parentParam = param;
+}
+});
+
+/* determine if we need extra columns, "attributes" and "default" */
+params.hasAttributes = false;
+params.hasDefault = false;
+params.hasName = false;
+
+params.forEach(function(param) {
+if (!param) { return; }
+
+if (param.optional || param.nullable) {
+params.hasAttributes = true;
+}
+
+if (param.name) {
+params.hasName = true;
+}
+
+if (typeof param.defaultvalue !== 'undefined') {
+params.hasDefault = true;
+}
+});
+?>
+<ul>
+  <?js
+      var self = this;
+      params.forEach(function(param) {
+      if (!param) { return; }
+      ?>
+
+
+  <li>
+    <?js if (params.hasName) {?>
+    <em><strong><?js
+        if (param.type && param.type.names) {
+        param.type.names.forEach(function(name, i) { ?>
+    <?js= self.linkto(name, self.htmlsafe(name)) ?>
+    <?js if (i < param.type.names.length-1) { ?> | <?js } ?>
+    <?js });
+        }?>
+    </strong></em>
+    <span class="name"><code><?js= param.name ?></code></span>
+    <?js } ?>
+
+    <?js if (params.hasAttributes) {?>
+    (optional
+    <?js } ?>
+
+    <?js if (params.hasDefault) {?>
+
+    <?js if (typeof param.defaultvalue !== 'undefined') { ?>
+    , defaults to
+    <strong><?js= self.htmlsafe(param.defaultvalue) ?></strong>
+    <?js } ?>
+    )
+    <?js } ?>
+    <br/>
+    <?js= param.description ?>
+  </li>
+  <?js }); ?>
+
+</ul>

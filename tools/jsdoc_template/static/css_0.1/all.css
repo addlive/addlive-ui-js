@@ -1,0 +1,443 @@
+body {
+  margin: 0;
+  color: #666;
+  font: 16px/28px Arial, Helvetica, sans-serif;
+  background-image: url(../bg.png);
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: none;
+
+}
+
+img {
+  border-style: none;
+}
+
+a {
+  color: #1871eb;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #999;
+}
+
+q {
+  quotes: none;
+}
+
+q:before {
+  content: ''
+}
+
+q:after {
+  content: ''
+}
+
+header, footer, article, section, hgroup, nav, figure, aside {
+  display: block;
+}
+
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+#wrapper {
+  width: 980px;
+  margin: 0 auto;
+  padding: 0 5px;
+}
+
+#header {
+  text-align: center;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: bold;
+  padding: 33px 10px 14px;
+
+}
+
+.title-wrapper {
+
+  padding: 34px 0 20px;
+}
+
+.title-wrapper a {
+
+}
+
+.title-wrapper a:hover {
+  color: #1871eb;
+  text-decoration: none;
+}
+
+header {
+}
+
+#main {
+  width: 960px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #ffffff;
+  padding: 0 10px;
+  -moz-box-shadow: 0 0 8px #bbbbbb;
+  -webkit-box-shadow: 0 0 8px #bbbbbb;
+  box-shadow: 0 0 8px #bbbbbb;
+}
+
+#main h1 {
+  font-family: 'Rokkitt', serif;
+  color: #1871eb;
+  margin: 0 0 17px 22px;
+
+}
+
+#main.home h1 {
+  font-size: 52px;
+  line-height: 47px;
+  margin: 0 0 31px;
+}
+
+.heading-block p {
+  margin: 0 0 27px;
+}
+
+#main h2 {
+  font-family: 'Rokkitt', serif;
+  margin: 0;
+  color: #1871eb;
+  text-align: center;
+}
+
+#main p {
+  margin: 0 0 10px;
+}
+
+.article {
+  height: 1%;
+  padding: 35px 172px 3px;
+  border-top: 1px solid #d9d9d9;
+}
+
+pre {
+  border: 1px solid #c3c3c3;
+  padding: 5px;
+  background: #eaeaea;
+  overflow: auto;
+}
+
+.class-description {
+  font-style: italic;
+  font-family: Palatino, 'Palatino Linotype', serif;
+  font-size: 130%;
+  line-height: 140%;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+#main {
+  width: 960px;
+}
+
+section {
+  display: block;
+
+  background-color: #fff;
+  /*padding: 12px 24px;*/
+  border-bottom: 1px solid #ccc;
+  /*margin-right: 240px;*/
+  width: 930px;
+}
+
+article {
+  width: 100%
+}
+
+.variation {
+  display: none;
+}
+
+.optional:after {
+  content: "opt";
+  font-size: 60%;
+  color: #aaa;
+  font-style: italic;
+  font-weight: lighter;
+}
+
+
+footer {
+  display: block;
+  padding: 6px;
+  margin-top: 12px;
+  font-style: italic;
+  font-size: 90%;
+}
+
+h1 {
+  font-size: 200%;
+  font-weight: bold;
+  letter-spacing: -0.01em;
+  margin: 6px 0 9px 0;
+}
+
+h2 {
+  font-size: 170%;
+  font-weight: bold;
+  letter-spacing: -0.01em;
+  margin: 6px 0 3px 0;
+}
+
+h3 {
+  font-size: 150%;
+  font-weight: bold;
+  letter-spacing: -0.01em;
+  margin: 6px 0 3px 0;
+}
+
+h4 {
+  font-size: 130%;
+  font-weight: bold;
+  letter-spacing: -0.01em;
+
+  margin: 18px 0 3px 0;
+  color: #1871EB;
+}
+
+h5, .container-overview .subsection-title {
+  font-size: 120%;
+  font-weight: bold;
+  letter-spacing: -0.01em;
+  margin: 8px 0 3px;
+}
+
+h6 {
+  font-size: 100%;
+  letter-spacing: -0.01em;
+  margin: 6px 0 3px 0;
+  font-style: italic;
+}
+
+.ancestors {
+  color: #999;
+}
+
+.ancestors a {
+  color: #999 !important;
+  text-decoration: none;
+}
+
+.important {
+  font-weight: bold;
+  color: #950B02;
+}
+
+.yes-def {
+  text-indent: -1000px;
+}
+
+.type-signature {
+  color: #aaa;
+}
+
+.name, .signature {
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+}
+
+.details {
+  margin-top: 14px;
+}
+
+.details dt {
+  width: 100px;
+  float: left;
+  border-left: 2px solid #DDD;
+  padding-left: 10px;
+  padding-top: 6px;
+}
+
+.details dd {
+  margin-left: 50px;
+}
+
+.details ul {
+  margin: 0;
+}
+
+.details ul {
+  list-style-type: none;
+}
+
+.details li {
+  margin-left: 30px;
+  padding-top: 6px;
+}
+
+.description {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.code-caption {
+  font-style: italic;
+  font-family: Palatino, 'Palatino Linotype', serif;
+  font-size: 107%;
+  margin: 0;
+}
+
+.sh_sourceCode {
+  border: 1px solid #ddd;
+}
+
+.sh_sourceCode code {
+  font-family: Consolas, 'Lucida Console', Monaco, monospace;
+  font-size: 100%;
+  line-height: 18px;
+  display: block;
+  padding: 4px 12px;
+  margin: 0;
+  color: #000;
+}
+
+.params, .props {
+  border-spacing: 0;
+  border: 0;
+  border-collapse: collapse;
+  width: 100%
+}
+
+.params .name, .props .name, .name code {
+  color: #1871EB;
+  font-family: Consolas, 'Lucida Console', Monaco, monospace;
+  font-size: 100%;
+}
+
+.params td, .params th, .props td, .props th {
+  border: 1px solid #ddd;
+  margin: 0;
+  text-align: left;
+  vertical-align: top;
+  padding: 4px 6px;
+  display: table-cell;
+}
+
+.params thead tr, .props thead tr {
+  background-color: #ddd;
+  font-weight: bold;
+}
+
+.params .params thead tr, .props .props thead tr {
+  background-color: #fff;
+  font-weight: bold;
+}
+
+.params th, .props th {
+  border-right: 1px solid #aaa;
+}
+
+.params thead .last, .props thead .last {
+  border-right: 1px solid #ddd;
+}
+
+.disabled {
+  color: #454545;
+}
+
+.tag-see ul {
+  padding-top: 8px;
+}
+
+.tag-see li {
+  line-height: 12px;
+}
+
+.version-wrapper {
+  font-weight: bold;
+}
+
+/**
+Navigation
+**/
+
+#navHeader {
+  position:absolute;
+  top:0;
+  right:0;
+  width:30px;
+  height: 28px;
+  border-radius: 25px;
+
+  border: 1px solid #CCC;
+  font-size: 26px;
+  text-align:center;
+  padding-top:2px;
+  cursor:pointer;
+  z-index:100;
+  background: #e8e8e8;
++
+}
+
+#navContent {
+  display: none;
+  position:absolute;
+  top:15px;
+  right:15px;
+  background: rgba(240, 240, 240, 0.9);
+  float: left;
+  padding-left: 9px;
+  padding-bottom: 9px;
+  border: 1px solid #ccc;
+  width: 185px;
+  z-index:10;
+}
+
+nav {
+  position: fixed;
+  right: 150px;
+  top: 50px;
+}
+
+nav:hover {
+  /*display: none;*/
+  /*width: 185px;*/
+
+}
+
+
+nav:hover {
+  /*display: none;*/
+  width: 185px;
+
+}
+
+nav ul {
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif;
+  line-height: 12px;
+  font-size: 12px;
+  padding: 0;
+  margin: 0 0 1px 0;
+  list-style-type: none;
+}
+
+nav h3 {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 15px;
+}
+
+nav li {
+  margin-top: 6px;
+}
+
+nav a {
+  color: #5C5954;
+}
+
+nav a:visited {
+  color: #5C5954;
+}
+
+nav a:active {
+  color: #5C5954;
+}

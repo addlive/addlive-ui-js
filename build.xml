@@ -1,0 +1,283 @@
+<?xml version="1.0"?>
+<project name="AddLive-UI library" basedir="." default="compile">
+
+<!--
+Deployment properties
+-->
+<property name="release.bucket" value="XXX"/>
+<property name="aws.secret_key" value="XXX"/>
+<property name="aws.access_key" value="XXX"/>
+<property name="aws.region" value="XXX"/>
+<property name="aws.destination_dir" value="XXX"/>
+<property name="aws.destination_dir" value="XXX"/>
+
+<!--
+Build properties
+-->
+<property name="build.level" value="dev"/>
+
+<property name="build.dir" value="build"/>
+<property name="build.dir" value="build"/>
+<property name="build.sdkFileName" value="addlive-ui-sdk"/>
+<property name="toolsdir" value="${basedir}/tools"/>
+<property name="jstestdriver.jar" value="${toolsdir}/JsTestDriver-1.3.4.b.jar"/>
+<property name="jshint.src" value="${toolsdir}/jshint.js"/>
+
+<property name="jstestdriver.host" value="localhost"/>
+<property name="jstestdriver.port" value="9090"/>
+<property name="jstestdriver.xmlOutput" value="jstestdriver-output"/>
+
+
+<!--
+===========================================================================
+Compile target
+===========================================================================
+-->
+
+<target name="compile" depends="tasks.setup, js.hint">
+
+  <!--
+  1. Setup the sources list
+  -->
+  <filelist id="js-sources" dir="${basedir}/src/js">
+    <file name="SA_Connectivity.js"/>
+    <file name="SA_DevicesSetup.js"/>
+    <file name="SetupAssistant.js"/>
+  </filelist>
+
+
+  <!--
+  2. Prepare the configuration sources
+  -->
+  <echo message="Preparing the configuration file"/>
+  <copy file="${basedir}/src/js/conf.tmpl.js" tofile="${build.dir}/config.js">
+    <filterset>
+      <filter token="release.assetsUrl" value="${release.assetsUrl}"/>
+    </filterset>
+  </copy>
+
+
+  <filelist id="configuration-sources" dir="${build.dir}">
+    <file name="config.js"/>
+  </filelist>
+
+
+  <!--
+  3. Compile the minimized SDK
+  -->
+  <echo message="Compiling minimized SDK"/>
+  <jscomp compilationLevel="simple" warning="quiet"
+          output="${build.dir}/${build.sdkFileName}.min.tmp.js"
+          prettyPrint="false">
+    <sources refid="js-sources"/>
+    <sources refid="configuration-sources"/>
+
+  </jscomp>
+  <concat destfile="${build.dir}/${build.sdkFileName}.min.js">
+    <filelist dir="src/js" files="00_Namespace.js"/>
+    <filelist dir="lib" files="jquery.min.js"/>
+    <filelist dir="lib" files="jquery-ui.min.js"/>
+    <filelist dir="${build.dir}" files="${build.sdkFileName}.min.tmp.js"/>
+    <filelist refid="configuration-sources"/>
+  </concat>
+
+  <!--
+  4. Compile the dev SDK
+  -->
+  <echo message="Compiling Debug SDK"/>
+  <concat destfile="${build.dir}/${build.sdkFileName}.js">
+    <filelist dir="src/js" files="00_Namespace.js"/>
+    <filelist dir="lib" files="jquery.min.js"/>
+    <filelist dir="lib" files="jquery-ui.min.js"/>
+    <filelist refid="js-sources"/>
+    <filelist refid="configuration-sources"/>
+  </concat>
+
+</target>
+
+<!--
+===========================================================================
+Docs target
+===========================================================================
+-->
+
+
+<target name="docs">
+
+  <!--
+  1. Prepare the classpath for running the JSDoc
+  -->
+
+  <path id="jsdoc.path">
+    <fileset dir="tools/jsdoc/lib" includes="*.jar"/>
+  </path>
+
+  <!--
+  2. Define the class for processing the JSDoc
+  -->
+  <!--<property name="rhinoClass" value="org.mozilla.javascript.tools.debugger.Main"/>-->
+  <property name="rhinoClass"
+            value="org.mozilla.javascript.tools.shell.Main"/>
+
+  <!--
+  3. Copy the custom template files.
+  -->
+  <copy todir="tools/jsdoc/templates/cloudeo">
+    <fileset dir="tools/jsdoc_template"/>
+  </copy>
+  <copy todir="tools/jsdoc">
+    <fileset dir="tools" includes="jsdoc_conf.json"/>
+  </copy>
+
+  <!--
+  4. Launch the JVM with the JSDoc
+  -->
+  <java classpathref="jsdoc.path" classname="${rhinoClass}" fork="true"
+        failonerror="true" dir="tools/jsdoc">
+    <arg value="-modules"/>
+    <arg value="node_modules"/>
+    <arg value="-modules"/>
+    <arg value="rhino_modules"/>
+    <arg value="-modules"/>
+    <arg value="plugins"/>
+    <arg value="-modules"/>
+    <arg value="tools/jsdoc"/>
+    <arg value="jsdoc.js"/>
+    <arg value="--dirname=."/>
+    <arg value="-c"/>
+    <arg value="jsdoc_conf.json"/>
+    <arg value="-t"/>
+    <arg value="templates/cloudeo"/>
+    <arg value="-r"/>
+    <arg value="-d"/>
+    <arg value="apidocs"/>
+    <arg value="q"/>
+    <arg value="version=${version}"/>
+    <arg value="${basedir}/src"/>
+  </java>
+
+  <!--
+  5. Move the outcomes to the build directory and clean up
+  -->
+  <copy todir="${build.dir}/apidocs">
+    <fileset dir="tools/jsdoc/apidocs"/>
+  </copy>
+  <delete dir="tools/jsdoc/apidocs"/>
+  <delete dir="tools/jsdoc/templates/cloudeo"/>
+</target>
+
+<!--
+===========================================================================
+Dist target
+===========================================================================
+-->
+
+<!-- -->
+<target name="dist" depends="tasks.setup, compile">
+  <echo message="Uploading distribution to ${release.bucket}/${aws.destination_dir}
+  Using access key: ${aws.access_key}"/>
+  <copy todir="${build.dir}">
+    <fileset dir="src">
+      <exclude name="js/*"/>
+      <exclude name="config.js"/>
+      <exclude name="${build.sdkFileName}.min.tmp.js"/>
+    </fileset>
+  </copy>
+
+  <s3put key="${aws.access_key}" secret="${aws.secret_key}"
+         bucket="${release.bucket}"
+         dest="${aws.destination_dir}" region="${aws.region}"
+         publicread="true">
+    <fileset dir="${build.dir}">
+      <exclude name="config.js"/>
+      <exclude name="${build.sdkFileName}.min.tmp.js"/>
+    </fileset>
+  </s3put>
+</target>
+
+<target name="js.hint" description="Verifies the source directory using the
+          JSHint tool" depends="tasks.setup">
+  <echo message="JS hint source file: ${jshint.src}"/>
+  <jshint dir="${basedir}/src" includes="**/*.js" excludes="json2.js"
+          optionsFile="${toolsdir}/jshint.properties"
+          globals="jQuery:true,ADL:true,ActiveXObject:true"
+          jshintSrc="${jshint.src}"/>
+</target>
+
+<!--
+===========================================================================
+Test targets
+===========================================================================
+-->
+
+<target name="test.serverRun">
+
+  <java jar="${jstestdriver.jar}" fork="true">
+    <arg value="--port"/>
+    <arg value="${jstestdriver.port}"/>
+  </java>
+
+</target>
+
+<target name="test.unit">
+  <delete dir="${jstestdriver.xmlOutput}"/>
+  <mkdir dir="${jstestdriver.xmlOutput}"/>
+  <java jar="${jstestdriver.jar}" fork="true" failonerror="true">
+    <arg value="--config"/>
+    <arg value="${basedir}/test/unit/config.yaml"/>
+    <arg value="--server"/>
+    <arg value="http://${jstestdriver.host}:${jstestdriver.port}"/>
+    <arg value="--tests"/>
+    <arg value="all"/>
+    <arg value="--raiseOnFailure"/>
+    <arg value="true"/>
+    <arg value="--testOutput"/>
+    <arg value="${jstestdriver.xmlOutput}"/>
+  </java>
+
+</target>
+
+<!--
+===========================================================================
+Clean target
+===========================================================================
+-->
+
+
+<target name="clean">
+  <delete dir="${build.dir}"/>
+</target>
+
+<!--
+===========================================================================
+tasks.setup target
+===========================================================================
+-->
+
+
+<target name="tasks.setup">
+  <path id="tasks.path">
+    <fileset dir="lib" includes="*.jar"/>
+  </path>
+
+  <taskdef name="s3put"
+           classname="it.corley.ant.S3PutTask"
+           classpathref="tasks.path"/>
+  <typedef name="contenttype.mapping"
+           classname="it.corley.ant.ContentTypeMapping"
+           classpathref="tasks.path"/>
+
+  <taskdef name="jscomp"
+           classname="com.google.javascript.jscomp.ant.CompileTask"
+           classpath="tools/compiler.jar"/>
+  <path id="jshint.path">
+    <fileset dir="${toolsdir}" includes="ant-jshint-0.3.1-deps.jar"/>
+  </path>
+
+  <taskdef name="jshint" classname="com.philmander.jshint.JsHintAntTask"
+           classpathref="jshint.path"/>
+
+
+</target>
+
+</project>
