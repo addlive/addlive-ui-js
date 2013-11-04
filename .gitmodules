@@ -1,0 +1,3 @@
+[submodule "tools/jsdoc"]
+	path = tools/jsdoc
+	url = git://github.com/jsdoc3/jsdoc.git
