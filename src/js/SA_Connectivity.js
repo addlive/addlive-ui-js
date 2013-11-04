@@ -63,14 +63,21 @@
         4:{ok:0}
       },
 
+  // Explicit CPU white and black listing
       WARN_CPU_PATTERNS = [
-        /Atom/, /Celeron/
+        /Atom/
       ],
 
       BAD_CPU_PATTERNS = [
         /Pentium III/,
         /Pentium II/
+      ],
+
+      OK_CPU_PATTERNS = [
+        /i5/, // Intel core i5
+        /i7/ // Intel core i7
       ];
+
 
   // Scope variables
   var connHwTestOverallResult = ConnHwItemStatus.OK,
@@ -164,6 +171,11 @@
     $.each(BAD_CPU_PATTERNS, function (i, pattern) {
       if (info.brand_string.match(pattern)) {
         cpuStatus = ConnHwItemStatus.BAD;
+      }
+    });
+    $.each(OK_CPU_PATTERNS, function (i, pattern) {
+      if (info.brand_string.match(pattern)) {
+        cpuStatus = ConnHwItemStatus.OK;
       }
     });
     return cpuStatus;
