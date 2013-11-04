@@ -5,6 +5,13 @@ This project contains widget gallery to be used with the AddLive JS SDK.
 
 For more details refer to http://www.addlive.com
 
+## Building
+
+To build the minimised library, the project uses Apache Ant.
+
+There is a single build step required to generate the library:
+
+`ant -propertyfile conf/build.properties compile`
 
 ## Widgets
 
