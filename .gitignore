@@ -1,2 +1,6 @@
+// PyCharm / WebStorm project files
+
+.idea
+
 build
 conf/build_.*
